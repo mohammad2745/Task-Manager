@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require("../server");
+const app = require("../src/server");
 const sequelize = require("../src/config/database");
 const Task = require("../src/models/task.model");
 
