@@ -9,23 +9,18 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Test database connection
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("Database connection established successfully.");
-  })
-  .catch((err) => {
-    console.error("Unable to connect to the database:", err);
-  });
-
-// Sync all models with the database
-sequelize.sync().then(() => {
-  console.log("Tables created!");
-});
-
 app.use("/", taskRouter);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  sequelize
+    .authenticate()
+    .then(() => console.log("Database connected."))
+    .catch((err) => console.error("DB connection error:", err));
+
+  sequelize.sync().then(() => console.log("Tables created!"));
+
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+}
+
+module.exports = app;
