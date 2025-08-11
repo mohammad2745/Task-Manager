@@ -1,6 +1,6 @@
 const express = require("express");
-const sequelize = require("./config/database");
-const taskRouter = require("./routes/taskRouter");
+const sequelize = require("./src/config/database");
+const taskRouter = require("./src/routes/taskRouter");
 
 require("dotenv").config();
 
