@@ -27,4 +27,43 @@ describe("Task API", () => {
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
+
+  it("should get a single task by ID", async () => {
+    const task = await Task.create({
+      title: "Single Task",
+      description: "Testing single task fetch",
+    });
+
+    const res = await request(app).get(`/tasks/${task.id}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.title).toBe("Single Task");
+  });
+
+  it("should update a task", async () => {
+    const task = await Task.create({
+      title: "Update Task",
+      description: "Before update",
+    });
+
+    const res = await request(app)
+      .put(`/tasks/${task.id}`)
+      .send({ title: "Updated Task", isCompleted: true });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.title).toBe("Updated Task");
+    expect(res.body.isCompleted).toBe(true);
+  });
+
+  it("should delete a task", async () => {
+    const task = await Task.create({
+      title: "Delete Task",
+      description: "Testing delete",
+    });
+
+    const res = await request(app).delete(`/tasks/${task.id}`);
+    expect(res.statusCode).toBe(204); // No Content
+
+    const deleted = await Task.findByPk(task.id);
+    expect(deleted).toBeNull();
+  });
 });
